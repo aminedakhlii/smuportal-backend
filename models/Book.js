@@ -4,16 +4,14 @@ const bookSchema = new mongoose.Schema({
   Title: {
     type: String,
     required: true,
-    lowercase: true,
     min: 2,
-    max: 255
+    max: 255,
   },
   Author: {
     type: String,
     required: true,
-    lowercase: true,
     min: 2,
-    max: 255
+    max: 255,
   },
   ISBN: {
     type: Number,
@@ -23,10 +21,9 @@ const bookSchema = new mongoose.Schema({
     max: 9999999999999,
     validate: {
       validator: Number.isInteger,
-      message: "{VALUE} is not an integer value"
-    }
+      message: "{VALUE} is not an integer value",
+    },
   },
-
 });
 
 module.exports = mongoose.model("Book", bookSchema);
