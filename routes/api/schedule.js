@@ -6,6 +6,7 @@ const router = Router({
 
 router.get("/schedule", async (req, res) => {
 console.log('hi');
+return res.json({})
 });
 
 module.exports = router;
