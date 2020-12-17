@@ -1,126 +1,99 @@
-function getenetic_algo(){}
+const Population = require('./Population') ;
+const Schedule = require('../schedules/Schedule');
+
+function Getenetic_algo(data){
 
 
+    this.POP_SIZE = 9 ;
+    this.NBR_ELITE = 1 ;
+    this.MUTATION_RATE = 0.1 ;
+    this.TOURNAMENT_SEL_SIZE = 3 ;
+    this.data = data ;
 
-getenetic_algo.prototype = {
-
-    constructor : function(){
-      this.POP_SIZE = 9 ;
-      this.NBR_ELITE = 1 ;
-      this.MUTATION_RATE = 0.1 ;
-      this.TOURNAMENT_SEL_SIZE = 3 ;
-    },
-
-
-
-    evolve : function(population) {return this.mutatePopulation(this.crossoverPop(population)) ; },
+    this.evolve = function(population) {
+      return this.mutatePopulation(this.crossoverPop(population)) ;
+    }
 
 
+    this.crossoverPop = function(population){
 
+        var crossoverP = new Population(0,this.data) ;
 
-    crossoverPop : function(population){
-        crossoverP = Population(0) ;
         for (var i = 0; i < this.NBR_ELITE; i++) {
           crossoverP.schedules.push(population.schedules[i]) ;
         }
-   
-        i = this.NBR_ELITE ;
-   
+
+        var i = this.NBR_ELITE ;
+
         while(i < this.POP_SIZE) {
-          schedule1 = this.selectTournamentPop(population.schedules[0]) ;
-          schedule2 = this.selectTournamentPop(population.schedules[0]) ;
+          var schedule1 = this.selectTournamentPop(population) ;
+          var schedule2 = this.selectTournamentPop(population) ;
           crossoverP.schedules.push(this.crosoverSchedule(schedule1,schedule2));
-   
+
           i+=1;
         }
         return crossoverP;
-    },
-
-      
+    }
 
 
-    mutatePopulation :function(population){
+
+
+    this.mutatePopulation = function(population){
         for (var i = this.NBR_ELITE; i < this.POP_SIZE; i++) {
           this.mutateSchedule(population.schedules[i]);
         }
         return population;
-    },
+    }
 
 
 
-    //emchy l file Schedule.js fi hedhy 
-    crosoverSchedule : function(schedule1,schedule2){
-        crossoverSchedule = new schedule.init();// there is a problem here crossoverSchedule = Schedule().init()
-                                              
-        for (var i = 0; i < crosoverSchedule.classes.length; i++) {
-   
-          if(Math.random() > 0.5 ) crosoverSchedule.classes[i] = schedule1.classes[i] ;
-          else crosoverSchedule.classes[i] = schedule2.classes[i] ;
-   
+    //emchy l file Schedule.js fi hedhy
+    this.crosoverSchedule = function(schedule1,schedule2){
+        var crossoverSchedule = new Schedule(this.data) ;
+        crossoverSchedule.init();
+
+        for (var i = 0; i < crossoverSchedule.classes.length; i++) {
+
+          if(Math.random() > 0.5 ) crossoverSchedule.classes[i] = schedule1.classes[i] ;
+          else crossoverSchedule.classes[i] = schedule2.classes[i] ;
+
         }
-   
-        return crosoverSchedule ;
-    },
+        return crossoverSchedule ;
+    }
 
 
 
 
-    mutateSchedule : function(sched) {
-        temp = new schedule.init();
+    this.mutateSchedule = function(sched) {
+        var temp = new Schedule(this.data) ;
+        temp.init();
+
         for (var i = 0; i < sched.classes.length; i++) {
          if(this.MUTATION_RATE > Math.random()) sched.classes[i] = temp.classes[i] ;
         }
-   
+
         return sched ;
-    },
+    }
 
 
 
-    selectTournamentPop : function(pop) {
-        tournPop = Population(0);
-        i=0 ;
+    this.selectTournamentPop = function(pop) {
+
+        var tournPop = new Population(0,this.data);
+        var i=0 ;
         while (i < this.TOURNAMENT_SEL_SIZE) {
           tournPop.schedules.push(pop.schedules[Math.floor(Math.random() * this.POP_SIZE)]) ;
-          i++ ;
+          i += 1 ;
         }
-   
-        var dict = {} ;
-        var fits = [] ;
-   
-        for (var i = 0; i < tournPop.schedules.length; i++) {
-            x = tournPop.schedule[i];
-            y = tournPop.schedule[i].fitness();
-            dict.push(x,y) ;
-            fits.push(y) ;
-        }
-   
-        fits.sort() ;
-   
-        finalTournPop = [] ;
-   
-        for (var i = 0; i < fits.length; i++) {
-          for (let key in dict) {
-            if(fits[i] == dict[key]) finalTournPop.push(key) ;
-          }
-        }
-        
-        return finalTournPop ;
-    },
 
-
-
-    // sort by key mekenet fi hata class zaama naamlelha file wahdou 
-    sort_by_key: function(array, key){
-
-        return array.sort(function(a, b)
-        {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        tournPop.schedules.sort(function(a,b){
+          return b.fitness() - a.fitness() ;
         });
-    },
+
+        return tournPop.schedules[0] ;
+    }
 
 }
 
 
-module.exports = getenetic_algo;
-
+module.exports = Getenetic_algo;

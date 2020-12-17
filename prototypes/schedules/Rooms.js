@@ -1,14 +1,9 @@
-function Rooms(){}
-
-Rooms.prototype = {
-
-    init : function(id,name,capacity,departement){
-
-        this.id = id;
-        this.name = name;
-        this.capcity = capacity;
-        this.departement = departement;
-    }
+function Room(id,name,capacity,departement){
+  this.id = id;
+  this.name = name;
+  this.capacity = capacity;
+  this.departement = departement;
 }
 
-module.exports = Romms;
+
+module.exports = Room;

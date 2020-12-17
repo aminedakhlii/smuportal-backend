@@ -1,12 +1,11 @@
-function Group(){}
+function Group(id,name,courses){
 
-Group.prototype = {
 
-    init : function(id,name,courses){
         this.id = id;
         this.name = name;
         this.courses = courses;
-    }
+
+
 }
 
 

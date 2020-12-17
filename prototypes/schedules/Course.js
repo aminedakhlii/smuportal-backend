@@ -1,14 +1,10 @@
-function Course(){}
+function Course(id,name,instructors,max_num_OFstudent){
 
-Course.prototype = {
+  this.max_num_OFstudent = max_num_OFstudent;
+  this.id = id;
+  this.instructors = instructors;
+  this.name = name;
 
-    init : function(max_num_OFstudent,id,instructor,name){
-
-        this.max_num_OFstudent = max_num_OFstudent;
-        this.id = id;
-        this.instructor = instructor;
-        this.name = name;
-    }
 
 }
 

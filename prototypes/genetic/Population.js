@@ -1,19 +1,16 @@
-function Population(){};
+const Schedule = require('../schedules/Schedule')
 
-Population.prototype = {
-
-    popul : function(size,data) {
+function Population(size,data){
 
         this.size = size ;
-        this.data = data;
         this.schedules = [] ;
 
-
         for (var i = 0; i < size; i++) {
-        this.schedules.push(Schedule.init()) ;
-
+          var tmp = new Schedule(data) ;
+          tmp.init() ;
+          this.schedules.push(tmp) ;
         }
-    }
+
 }
 
 module.exports = Population;

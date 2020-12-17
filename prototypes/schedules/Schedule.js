@@ -1,55 +1,70 @@
-function schedule(){}
+const Classe = require('./Classe');
 
+function Schedule(data){
 
-schedule.prototype = {
+    this.num_of_conf = 0;
+    this.data = data;
+    this.number_of_classes = 0;
+    this.classes = [];
+    this.fitness = -1 ;
 
+    this.init = function(){
 
-    constructor : function(data){
+        for (var i = 0; i < this.data.groups.length; i++) {
 
-        this.num_of_conf = 0;
-        this.data = data;
-        this.number_of_classes = 0;
-        this.classes = [];
-        this.fitness = -1 ;
+            var courses = data.groups[i].courses ;
 
-    },
+            for (var j = 0; j < courses.length; j++) {
 
+              let id = this.number_of_classes + 1 ;
 
-    init : function(){ // hedhy kenet ismha init()
-        this.groups = this.data.groups;
-      for (var i = 0; i < this.groups.length; i++) {
-        var courses = groups[i].get_courses() ;
-        for (var j = 0; j < courses.length; j++) {
-          var newClass = Classe(number_of_classes , courses[j] , data.rooms[Math.floor(Math.random() * data.rooms.length)] ,
-          courses[j].get_instructor()[Math.floor(Math.random() * courses[j].get_instructor().length)] ,
-          data.slots[Math.floor(Math.random() * data.slots.length)] , this.groups[i]) ;
+              var newClass = new Classe(
+                                id,
+                                courses[j],
+                                courses[j].instructors[Math.floor(Math.random() * courses[j].instructors.length)],
+                                this.data.slots[Math.floor(Math.random() * this.data.slots.length)],
+                                this.data.groups[Math.floor(Math.random() * this.data.groups.length)],
+                                this.data.rooms[Math.floor(Math.random() * this.data.rooms.length)]);
 
-          this.classes.push(newClass) ;
-        }
+                            this.number_of_classes += 1 ;
+
+                this.classes.push(newClass) ;
+            }
       }
-    },
 
-    fitness : function(){
+    }
 
-        for(let i = 0 ; i < length(this.classe);i++){
-           if(this.classe.room.capcity < this.classe.course.max_num_student){
+    this.display = function() {
+      console.log('Schedule : \n');
+      for (var i = 0; i < this.classes.length; i++) {
+        let c = this.classes[i] ;
+        console.log(c.course.name + "-----" + c.slot.time + "-----" + c.professor.name + "-----" + c.room.name + "-----" +
+                c.course.max_num_OFstudent + "-----" + c.room.capacity);
+      }
+      console.log(this.fitness() + '\n');
+    }
+
+    this.fitness = function(){
+
+        for(let i = 0 ; i < this.classes.length;i++){
+           if(this.classes[i].room.capacity < this.classes[i].course.max_num_OFstudent){
                this.num_of_conf++;
             }
 
-            for(let j = i+1 ; j < length(this.classe); j++){
-                if(this.classe[i].slot == this.classe[j].slot){
-                    if(this.classe[i].room == this.classe[j].room){
+            for(let j = i+1 ; j < this.classes.length; j++){
+                if(this.classes[i].slot.id == this.classes[j].slot.id){
+                    if(this.classes[i].room.id == this.classes[j].room.id){
                         this.num_of_conf++;
                     }
-                    if(this.classe[i].proffesor == this.classe[j].proffesor){
+                    if(this.classes[i].professor.id == this.classes[j].professor.id){
                         this.num_of_conf++;
                     }
                 }
             }
         }
-        return 1 / this.num_of_conf + 1;
+        return 1 / (this.num_of_conf + 1);
     }
 }
 
 
-module.exports = schedule;
+module.exports = Schedule;
