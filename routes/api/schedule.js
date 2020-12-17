@@ -13,10 +13,11 @@ MUTATION_RATE = 0.1 ;
 TOURNAMENT_SEL_SIZE = 3 ;
 
 router.get("/schedule", async (req, res) => {
-  const data = new Data() ;
+
+  const data_ = new Data(true, function(data){
+
   var genNumber = 0 ;
   var population = new Population(POP_SIZE,data);
-
 
   population.schedules.sort(function(a,b){
     return b.fitness() - a.fitness() ;
@@ -33,6 +34,9 @@ router.get("/schedule", async (req, res) => {
   }
 
   population.schedules[0].display() ;
+
+  });
+
   res.send('done');
 
 });
