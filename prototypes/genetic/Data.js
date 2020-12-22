@@ -10,7 +10,7 @@ var path = require('path');
 
 async function fillCsv(filename,callback) {
   var res = [] ;
-  await fs.createReadStream(path.join(__dirname , '../../csvs') + filename)
+  await fs.createReadStream(path.join(__dirname , '../../csvs/new/generated/') + filename)
     .pipe(Csv())
     .on('data', (data) => res.push(data))
     .on('end', () => {
@@ -46,7 +46,7 @@ function Data(fromCSV, callback){
 
                 let tmpprofs = [] ;
 
-                let tmpstr = COURSES[i].PROF.split(":") ;
+                let tmpstr = COURSES[i].PROF.split("*") ;
 
                 for (var j = 0; j < tmpstr.length; j++) {
                   if(parseInt(tmpstr[j]) != -1)
@@ -60,7 +60,7 @@ function Data(fromCSV, callback){
 
                 let tmpCourses = [] ;
 
-                let tmpstr = GROUPS[i].COURSES.split(":") ;
+                let tmpstr = GROUPS[i].COURSES.split("*") ;
 
                 for (var j = 0; j < tmpstr.length; j++) {
                   tmpCourses.push(this.courses[parseInt(tmpstr[j]) - 1]);

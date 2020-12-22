@@ -1,4 +1,7 @@
 const Classe = require('./Classe');
+const Csv = require('csv-writer').createObjectCsvWriter;
+const fs = require('fs');
+
 
 function Schedule(data){
 
@@ -42,6 +45,40 @@ function Schedule(data){
                 c.course.max_num_OFstudent + "-----" + c.room.capacity);
       }
       console.log(this.fitness() + '\n');
+    }
+
+    this.toCsv = function() {
+      const csvWriter = Csv({
+        path : `${__dirname}/../../csvs/generated/finalSchedule.csv`,
+        header : [
+          {id: 'course' , title : 'Course Code'},
+          {id: 'slot' , title : 'Time'},
+          {id: 'prof' , title : 'Professor'},
+          {id: 'room' , title : 'Room'},
+          {id : 'max' , title : 'Max course students'},
+          {id : 'capacity' , title : 'Room capacity'}
+        ]
+      });
+
+      const data = [] ;
+
+      for (var i = 0; i < this.classes.length; i++) {
+        let c = this.classes[i] ;
+
+        data.push({
+          course : c.course.name,
+          slot : c.slot.time,
+          prof : c.professor.name,
+          room : c.room.name,
+          max : c.course.max_num_OFstudent,
+          capacity : c.room.capacity
+        });
+
+      }
+
+      csvWriter.writeRecords(data) ;
+      console.log('csv written successfully');
+
     }
 
     this.fitness = function(){
